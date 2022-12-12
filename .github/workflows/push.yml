@@ -14,8 +14,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Install decK
       run: |
-        curl -sL https://github.com/kong/deck/releases/download/v1.16.1/deck_1.16.1_linux_amd64.tar.gz -o deck.tar.gz \
-        tar -xf deck.tar.gz -C /tmp \
+        curl -sL https://github.com/kong/deck/releases/download/v1.16.1/deck_1.16.1_linux_amd64.tar.gz -o deck.tar.gz
+        tar -xf deck.tar.gz -C /tmp
         sudo cp /tmp/deck /usr/local/bin/
     - name: Validate Kong declarative configuration
       run: deck validate
