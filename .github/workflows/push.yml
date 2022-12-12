@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - main   
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+    name: Deploy API to Kong Control Plane
+    steps:        
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install decK
+      run: |
+        curl -sL https://github.com/kong/deck/releases/download/v1.16.1/deck_1.16.1_linux_amd64.tar.gz -o deck.tar.gz \
+        tar -xf deck.tar.gz -C /tmp \
+        sudo cp /tmp/deck /usr/local/bin/
+    - name: Validate Kong declarative configuration
+      run: deck validate
+    - name: Diff declarative config
+      run: deck diff --kong-addr ${{ secrets.KONG_ADDRESS }} --headers ${{ secrets.KONG_ADMIN_AUTH_HEADER }}
+    - name: Backup Existing Kong Configuration
+      run: deck dump --kong-addr ${{ secrets.KONG_ADDRESS }} --headers ${{ secrets.KONG_ADMIN_AUTH_HEADER }} -o kong-backup.yaml
+    - name: Upload Kong Config Backup Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: kong-backup
+        path: kong-backup.yaml
+    - name: Deploy declarative config to default workspace
+      run: deck sync --kong-addr ${{ secrets.KONG_ADDRESS }} --headers ${{ secrets.KONG_ADMIN_AUTH_HEADER }}
