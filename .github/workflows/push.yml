@@ -22,7 +22,7 @@ jobs:
     - name: Diff existing configuration vs new configuration
       run: deck diff --kong-addr ${{ secrets.KONG_ADDRESS }} --headers ${{ secrets.KONG_ADMIN_AUTH_HEADER }}
     - name: Backup existing Kong configuration
-      run: deck dump --kong-addr ${{ secrets.KONG_ADDRESS }} --headers ${{ secrets.KONG_ADMIN_AUTH_HEADER }} -o kong-backup.yaml
+      run: deck dump --kong-addr ${{ secrets.KONG_ADDRESS }} --headers ${{ secrets.KONG_ADMIN_AUTH_HEADER }} -o kong-backup.yaml -w cicd-example
     - name: Upload Kong backup to artifact repository
       uses: actions/upload-artifact@v3
       with:
