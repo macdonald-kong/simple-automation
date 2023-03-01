@@ -40,7 +40,7 @@ services:
       hide_client_headers: false
       hour: null
       limit_by: ip
-      minute: 6
+      minute: 10
       month: null
       path: null
       policy: local
